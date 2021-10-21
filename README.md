@@ -1,5 +1,7 @@
 # Message For You, Sir
 
+![Message for you, sir.](/assets/message-for-you-sir.png)
+
 ## Purpose
 
 You have multiple ships -- say one social ship, one group hosting ship, one software distribution ship.
