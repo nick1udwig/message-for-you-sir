@@ -1,4 +1,4 @@
-/-  dm-hook
+/-  dm-hook, gs=graph-store, p=post, r=resource
 /+  default-agent
 |%
 +$  versioned-state
@@ -6,7 +6,7 @@
     ==
 ::
 +$  state-zero
-    $:  [%0 counter=@]
+    $:  [%0 graph-to-post-to=(unit resource:r)]
     ==
 ::
 +$  card  card:agent:gall
@@ -22,7 +22,7 @@
 ++  on-init
   ^-  (quip card _this)
   ~&  >  '%mfys initialized successfully'
-  =.  state  [%0 0]
+  =.  state  [%0 ~]
   :_  this
   :~  [%pass /from-dm-hook %agent [our.bowl %dm-hook] %watch /updates]
   ==
@@ -33,9 +33,7 @@
   |=  old-state=vase
   ^-  (quip card _this)
   ~&  >  '%mfys recompiled successfully'
-  :_  this(state !<(versioned-state old-state))
-  :~  [%pass /from-dm-hook %agent [our.bowl %dm-hook] %watch /updates]
-  ==
+  `this(state !<(versioned-state old-state))
 ++  on-poke
   |=  [=mark =vase]
   ^-  (quip card _this)
@@ -43,24 +41,21 @@
       %noun
     ?+    q.vase  (on-poke:def mark vase)
         %print-state
-      ~&  >>  state
-      ~&  >>>  bowl  `this
+      ~&  >  state
+      ~&  >  bowl  `this
       ::
         %print-subs
-      ~&  >>  &2.bowl  `this
+      ~&  >  &2.bowl  `this
+      ::
+        [%set-graph-to-post-to ^]
+      =/  poke-arg=[@tas =resource:r]  !<([@tas resource:r] vase)
+      ~&  >  "got %set-graph-to-post-to {<resource.poke-arg>}"
+      `this(state [%0 [~ resource.poke-arg]])
     ==
   ==
 ::
-++  on-watch
-  |=  =path
-  ^-  (quip card _this)
-  ?+     path  (on-watch:def path)
-      [%counter ~]
-      ~&  >>  "got counter subscription from {<src.bowl>}"  `this
-  ==
-++  on-leave
-  |=  =path
-  ~&  "got counter leave request from {<src.bowl>}"  `this
+++  on-watch  on-watch:def
+++  on-leave  on-leave:def
 ++  on-peek   on-peek:def
 ++  on-agent
   |=  [=wire =sign:agent:gall]
@@ -70,14 +65,24 @@
     ?+  -.sign  (on-agent:def wire sign)
         %fact
       =/  dm-hook-action=action:dm-hook  !<(action:dm-hook q.cage.sign)
-      ~&  >  "from-dm-hook: {<dm-hook-action>}"  `this
-      :: ?+  -.dm-hook-action  (on-agent:def wire sign)
-      ::     %pendings
-      ::   ~&  >  "from-dm-hook: {<+.dm-hook-action>}"  `this
-      ::     ::
-      ::     %screen
-      ::   ~&  >  "from-dm-hook: {<+.dm-hook-action>}"  `this
-      :: ==
+      ~&  >  "from-dm-hook: {<dm-hook-action>}"
+      ?~  graph-to-post-to.state
+        `this
+      =/  post=post:p
+        :*  our.bowl
+            /1
+            now.bowl
+            ~[[%text (crip "{<dm-hook-action>}")]]
+            ~
+            ~
+        ==
+      =/  add-nodes=[resource:r (map index.p node:gs)]
+        :*  u.graph-to-post-to.state
+            (malt ~[[/1 [[%.y post] [%empty ~]]]])
+        ==
+      :_  this
+      :~  [%pass /to-group %agent [our.bowl %graph-push-hook] %poke %graph-update-3 !>([now.bowl [%add-nodes add-nodes]])]
+      ==
     ==
   ==
 ++  on-arvo   on-arvo:def
