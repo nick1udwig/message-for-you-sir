@@ -1,0 +1,10 @@
+:~  title+'Message For You, Sir'
+    info+'Forward DMs from utility ships'
+    color+0x4b.4b4b
+    glob-http+['https://raw.githubusercontent.com/hosted-fornet/message-for-you-sir/deccfa390f91c60bd830d04ee702de7f73ef0aaf/globs/glob-0v6.mm1c5.ccovo.q86so.cprq2.cpfu0.glob' 0v6.mm1c5.ccovo.q86so.cprq2.cpfu0]
+    image+'https://raw.githubusercontent.com/hosted-fornet/message-for-you-sir/master/assets/message-for-you-sir.png'
+    base+'message-for-you-sir'
+    version+[0 1 0]
+    website+'https://github.com/hosted-fornet/message-for-you-sir'
+    license+'MIT'
+==
